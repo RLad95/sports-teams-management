@@ -1,16 +1,17 @@
 from database import db
-from user import Users
+from user import User
 
 
-class City(db.model):
+class City(db.Model):
     __tablename__ = 'city'
     id = db.Column(db.Integer, primary_key = True)
     name = db.Column(db.String(80), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     user = db.relationship(User)
 
-    def __init__(self, name):
+    def __init__(self, name, user_id):
         self.name = name
+        self.user_id = user_id
 
     def save_to_db(self):
         db.session.add(self)
@@ -29,7 +30,7 @@ class City(db.model):
 
     @classmethod
     def find_all_cities(cls):
-        return cls.query.order_by(asc(cls.name)).all()
+        return cls.query.order_by(cls.name).all()
 
     @classmethod
     def find_by_id(cls, city_id):

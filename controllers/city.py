@@ -1,4 +1,4 @@
-from flask import render_template, redirect, request, url_for, flash, jsonify, Blueprint
+from flask import render_template, redirect, request, url_for, flash, Blueprint
 from models.city import City
 from models.user import User
 from user import login_session
@@ -12,11 +12,11 @@ city_url = Blueprint('city_url', __name__)
 @city_url.route('/city/')
 def show_cities():
     cities = City.find_all_cities()
+    creator = User.get_user_info(login_session.get('email'))
     if 'username' not in login_session:
-        creator = User.get_user_info(login_session.get('user_id'))
-        return render_template('public_cities.html', cities=cities, creator = creator)
+        return render_template('public_cities.html', cities=cities, creator=creator)
     else:
-        return render_template('cities.html', cities=cities)
+        return render_template('cities.html', cities=cities, creator=creator)
 
 
 # Add a new City
@@ -25,7 +25,7 @@ def new_city():
     if 'username' not in login_session:
         return redirect('/login')
     if request.method == 'POST':
-        new_city = City(name=request.form['name'])
+        new_city = City(name=request.form['name'], user_id=login_session['user_id'])
         new_city.save_to_db()
         flash('New City %s Successfully Created' % new_city.name)
         return redirect(url_for('city_url.show_cities'))
@@ -39,10 +39,13 @@ def edit_city(city_id):
     if 'username' not in login_session:
         return redirect('/login')
     edited_city = City.find_by_id(city_id)
+    if edited_city.user_id != login_session['user_id']:
+        flash('You are not authorized to edit the the city.')
+        return redirect(url_for('city_url.show_cities'))
     if request.method == 'POST':
         if request.form['name']:
             edited_city.name = request.form['name']
-            edit_city.save_to_db()
+            edited_city.save_to_db()
             flash('City Successfully Edited %s' % edited_city.name)
             return redirect(url_for('city_url.show_cities'))
     else:
@@ -57,6 +60,7 @@ def delete_city(city_id):
         return redirect('/login')
     if city_to_delete.user_id != login_session['user_id']:
         flash('You are not authorized to delete the city.')
+        return redirect(url_for('city_url.show_cities'))
     if request.method == 'POST':
         city_to_delete.delete_from_db()
         flash('%s Successfully Deleted' % city_to_delete.name)

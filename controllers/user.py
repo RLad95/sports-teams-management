@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, redirect, url_for, flash, jsonify, make_response
+from flask import Blueprint, render_template, request, redirect, url_for, flash, make_response
 from flask import session as login_session
 from oauth2client.client import FlowExchangeError
 from oauth2client.client import flow_from_clientsecrets
@@ -36,7 +36,7 @@ def show_login():
     return render_template('login.html', STATE=state)
 
 
-@user_url.route('/gconnect')
+@user_url.route('/gconnect', methods=['GET', 'POST'])
 def gconnect():
     if request.args.get('state') != login_session['state']:
         response = make_response(json.dumps('Invalid state parameter'), 401)
@@ -93,8 +93,6 @@ def gconnect():
     login_session['credentials'] = credentials.access_token
     login_session['gplus_id'] = gplus_id
 
-    print(login_session['credentials'])
-
     # Get user info
     userinfo_url = "https://www.googleapis.com/oauth2/v2/userinfo"
     params = {'access_token': credentials.access_token, 'alt': 'json'}
@@ -106,20 +104,24 @@ def gconnect():
     login_session['picture'] = data['picture']
     login_session['email'] = data['email']
 
+    user_id = User.get_user_id(login_session['email'])
+    if not user_id:
+        user_id = create_user(login_session)
+    login_session['user_id'] = user_id
+
     return render_template('connecting.html', login_session=login_session)
 
-l.route('/gdisconnect')
+
+@user_url.route('/gdisconnect', methods=['GET', 'POST'])
 def gdisconnect():
-    access_token = login_session.get('credentials')
-    print (access_token)
+    access_token = login_session.get('access_token')
     if access_token is None:
         response = make_response(json.dumps('Current user not connected.'), 401)
         response.headers['Content-Type'] = 'application/json'
         return response
-    url = 'https://accounts.google.com/o/oauth2/revoke?token=%s' % login_session['access_token']
+    url = 'https://accounts.google.com/o/oauth2/revoke?token=%s' % access_token
     h = httplib2.Http()
     result = h.request(url, 'GET')[0]
-    print result
     if result['status'] == '200':
         del login_session['credentials']
         del login_session['gplus_id']
@@ -129,8 +131,9 @@ def gdisconnect():
         response = make_response(json.dumps('Successfully disconnected.'), 200)
         response.headers['Content-Type'] = 'application/json'
         flash("you have signed out!")
-        return redirect(url_for('show_cities'))
+        return redirect(url_for('city_url.show_cities'))
     else:
         response = make_response(json.dumps('Failed to revoke token for given user.', 400))
         response.headers['Content-Type'] = 'application/json'
         return response
+

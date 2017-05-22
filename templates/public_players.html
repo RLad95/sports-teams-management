@@ -29,9 +29,9 @@
 		<div class="row">
 			<div class="col-md-1"></div>
 			<div class="col-md-3">
-				<h2>Appetizers</h2>
+				<h2>Basketball</h2>
 					{% for i in items %}
-						{% if i.course == 'Appetizer' %}
+						{% if i.course == 'Basketball' %}
 							<div class="teams-item">
 								<h3>{{i.name}}</h3>
 								<p>{{i.description}}</p>
@@ -42,9 +42,9 @@
 					{% endfor %}
 			</div>
 			<div class="col-md-4">			
-				<h2>Entrees</h2>
+				<h2>Football</h2>
 					{% for i in items %}
-						{% if i.course == 'Entree' %}
+						{% if i.course == 'Football' %}
 						<div class="teams-item">
 							<h3>{{i.name}}</h3>
 							<p>{{i.description}}</p>
@@ -55,20 +55,9 @@
 					{% endfor %}
 			</div>
 			<div class="col-md-3">
-				<h2>Desserts</h2>
+				<h2>Hockey</h2>
 					{% for i in items %}
-						{% if i.course == 'Dessert' %}
-						<div class="teams-item">
-							<h3>{{i.name}}</h3>
-							<p>{{i.description}}</p>
-							<p class="teams-price">{{i.price}}</p>
-							
-						</div>
-						{% endif %}
-					{% endfor %}
-				<h2>Beverages</h2>
-					{% for i in items %}
-						{% if i.course == 'Beverage' %}
+						{% if i.course == 'Hockey' %}
 						<div class="teams-item">
 							<h3>{{i.name}}</h3>
 							<p>{{i.description}}</p>

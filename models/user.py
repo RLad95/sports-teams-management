@@ -14,19 +14,16 @@ class User(db.Model):
         self.picture = picture
 
     def save_to_db(self):
-            db.session.add(self)
-            db.session.commit()
+        db.session.add(self)
+        db.session.commit()
 
     @property
     def serialize(self):
-        return {
-            'id': self.id,
-            'name': self.name,
-            'email': self.email,
-        }
+        self.email_ = {'id': self.id, 'name': self.name, 'email': self.email, }
+        return self.email_
 
     @classmethod
-    def get_user_id(cls,    email):
+    def get_user_id(cls, email):
         try:
             user = cls.query.filter_by(email=email).one()
             return user.id
@@ -37,6 +34,14 @@ class User(db.Model):
     def find_user_by_id(cls, user_id):
         try:
             user = cls.query.filter_by(id=user_id).one()
+            return user
+        except:
+            return None
+
+    @classmethod
+    def get_user_info(cls, email):
+        try:
+            user = cls.query.filter_by(email=email).one()
             return user
         except:
             return None
