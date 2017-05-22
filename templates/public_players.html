@@ -25,44 +25,47 @@
 			{% endwith %}
 		</div>
 	</div>
-	{% if items !=[] %}	
+	{% if players !=[] %}
 		<div class="row">
 			<div class="col-md-1"></div>
 			<div class="col-md-3">
 				<h2>Basketball</h2>
-					{% for i in items %}
-						{% if i.course == 'Basketball' %}
-							<div class="teams-item">
+					{% for i in players %}
+						{% if i.sport == 'Basketball' %}
+							<div class="player-item">
 								<h3>{{i.name}}</h3>
-								<p>{{i.description}}</p>
-								<p class="teams-price">{{i.price}}</p>
-								
+								<p>{{i.height}} cm</p>
+								<p>{{i.weight}} kg</p>
+								<a href='{{url_for('player_url.edit_player', city_id = city.id, player_id=i.id ) }}'>Edit</a> |
+								<a href='{{url_for('player_url.delete_player', city_id = city.id, player_id=i.id ) }}'>Delete</a>
 							</div>
 						{% endif %}
 					{% endfor %}
 			</div>
-			<div class="col-md-4">			
+			<div class="col-md-4">
 				<h2>Football</h2>
-					{% for i in items %}
-						{% if i.course == 'Football' %}
-						<div class="teams-item">
+					{% for i in players %}
+						{% if i.sport == 'Football' %}
+						<div class="player-item">
 							<h3>{{i.name}}</h3>
-							<p>{{i.description}}</p>
-							<p class="teams-price">{{i.price}}</p>
-							
+							<p>{{i.height}} cm</p>
+							<p>{{i.weight}} kg</p>
+							<a href='{{url_for('player_url.edit_player', city_id = city.id, player_id=i.id ) }}'>Edit</a> |
+							<a href='{{url_for('player_url.delete_player', city_id = city.id, player_id=i.id ) }}'>Delete</a>
 						</div>
 						{% endif %}
 					{% endfor %}
 			</div>
 			<div class="col-md-3">
 				<h2>Hockey</h2>
-					{% for i in items %}
-						{% if i.course == 'Hockey' %}
-						<div class="teams-item">
+					{% for i in players %}
+						{% if i.sport == 'Hockey' %}
+						<div class="player-item">
 							<h3>{{i.name}}</h3>
-							<p>{{i.description}}</p>
-							<p class="teams-price">{{i.price}}</p>
-							
+							<p>{{i.height}} cm </p>
+							<p>{{i.weight}} kg</p>
+							<a href='{{url_for('player_url.edit_player', city_id = city.id, player_id=i.id ) }}'>Edit</a> |
+							<a href='{{url_for('player_url.delete_player', city_id = city.id, player_id=i.id ) }}'>Delete</a>
 						</div>
 						{% endif %}
 					{% endfor %}

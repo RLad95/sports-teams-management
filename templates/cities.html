@@ -47,7 +47,9 @@
 				<div class="col-md-1"></div>
 					<div class="col-md-10 city-list">
 						<h3>{{city.name}}</h3>
-                        <strong> Created by {{creator.name}} </strong>
+                        {% if city.user_id == viewer.id %}
+                        <strong> Created by {{viewer.name}} </strong>
+                        {% endif %}
 					</div>
 				<div class="col-md-1"></div>
 			</div>

@@ -12,11 +12,11 @@ city_url = Blueprint('city_url', __name__)
 @city_url.route('/city/')
 def show_cities():
     cities = City.find_all_cities()
-    creator = User.get_user_info(login_session.get('email'))
     if 'username' not in login_session:
-        return render_template('public_cities.html', cities=cities, creator=creator)
+        return render_template('public_cities.html', cities=cities)
     else:
-        return render_template('cities.html', cities=cities, creator=creator)
+        viewer = User.get_user_info(login_session.get('email'))
+        return render_template('cities.html', cities=cities, viewer=viewer)
 
 
 # Add a new City
