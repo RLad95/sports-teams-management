@@ -1,8 +1,9 @@
-from database import db
+from base import Base
 from user import User
+from database import db
 
 
-class City(db.Model):
+class City(Base):
     __tablename__ = 'city'
     id = db.Column(db.Integer, primary_key = True)
     name = db.Column(db.String(80), nullable=False)
@@ -12,14 +13,6 @@ class City(db.Model):
     def __init__(self, name, user_id):
         self.name = name
         self.user_id = user_id
-
-    def save_to_db(self):
-        db.session.add(self)
-        db.session.commit()
-
-    def delete_from_db(self):
-        db.session.delete(self)
-        db.session.commit()
 
     @property
     def serialize(self):

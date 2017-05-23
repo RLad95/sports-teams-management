@@ -1,7 +1,8 @@
 from flask import Blueprint, render_template, redirect, request, url_for, flash
+from flask import session as login_session
+
 from models.city import City
 from models.player import Player
-from user import login_session
 
 player_url = Blueprint('player_url', __name__)
 

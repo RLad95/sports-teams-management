@@ -1,4 +1,5 @@
 from flask import render_template, redirect, request, url_for, flash, Blueprint
+
 from models.city import City
 from models.user import User
 from user import login_session

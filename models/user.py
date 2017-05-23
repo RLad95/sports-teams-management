@@ -1,7 +1,8 @@
+from base import Base
 from database import db
 
 
-class User(db.Model):
+class User(Base):
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(250), nullable=False)
@@ -12,10 +13,6 @@ class User(db.Model):
         self.name = name
         self.email = email
         self.picture = picture
-
-    def save_to_db(self):
-        db.session.add(self)
-        db.session.commit()
 
     @property
     def serialize(self):

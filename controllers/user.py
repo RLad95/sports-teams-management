@@ -1,14 +1,15 @@
-from flask import Blueprint, render_template, request, redirect, url_for, flash, make_response
-from flask import session as login_session
-from oauth2client.client import FlowExchangeError
-from oauth2client.client import flow_from_clientsecrets
-from models.user import User
-
 import json
 import random
 import string
 import httplib2
 import requests
+
+from flask import Blueprint, render_template, request, redirect, url_for, flash, make_response
+from flask import session as login_session
+from oauth2client.client import FlowExchangeError
+from oauth2client.client import flow_from_clientsecrets
+
+from models.user import User
 
 
 user_url = Blueprint('user_url', __name__)
@@ -35,30 +36,31 @@ def show_login():
     return render_template('login.html', STATE=state)
 
 
-@user_url.route('/gconnect', methods=['GET', 'POST'])
+@user_url.route('/gconnect', methods=['POST'])
 def gconnect():
-    if request.args.get('state') != login_session['state']:
+    if request.args.get('state') != login_session['state']: # compares the state token passed in with the login session
         response = make_response(json.dumps('Invalid state parameter'), 401)
         response.headers['Content-Type'] = 'application/json'
         return response
-    code = request.data
+    code = request.data # one time code
 
     try:
         oauth_flow = flow_from_clientsecrets('client_secrets.json', scope='')
         oauth_flow.redirect_uri = 'postmessage'
-        credentials = oauth_flow.step2_exchange(code)
+        credentials = oauth_flow.step2_exchange(code) # collects the access token with the one time code
     except FlowExchangeError:
         response = make_response(json.dumps('Failed to upgrade the ' +
                                             'authorization code'), 401)
         response.headers['Content-Type'] = 'application/json'
-        return response
+        return response # send the response as a json object
 
     # Check that the access token is valid
     access_token = credentials.access_token
     login_session['access_token'] = credentials.access_token
-    url = 'https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=%s' % access_token
+    url = 'https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=%s' % access_token #appends  the tken to URL
+
     http = httplib2.Http()
-    result = json.loads(http.request(url, 'GET')[1])
+    result = json.loads(http.request(url, 'GET')[1]) #json get request
     # If there is an error in the access token info, abort
     if result.get('error') is not None:
         response = make_response(json.dumps(result.get('error')), 500)

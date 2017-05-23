@@ -1,4 +1,5 @@
 from flask import Blueprint, jsonify
+
 from models.city import City
 from models.player import Player
 

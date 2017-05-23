@@ -1,8 +1,9 @@
-from database import db
+from base import Base
 from city import City
+from database import db
 
 
-class Player(db.Model):
+class Player(Base):
     __tablename__ = 'player'
 
     name = db.Column(db.String(80), nullable=False)
@@ -16,17 +17,9 @@ class Player(db.Model):
     def __init__(self, name, height, weight, sport, city_id):
         self.name = name
         self.height = height
-        self.weight = weight
+        self.weight     = weight
         self.sport = sport
         self.city_id = city_id
-
-    def save_to_db(self):
-        db.session.add(self)
-        db.session.commit()
-
-    def delete_from_db(self):
-        db.session.delete(self)
-        db.session.commit()
 
     @property
     def serialize(self):
