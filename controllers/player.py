@@ -28,8 +28,12 @@ def new_player(city_id):
         flash('You are not authorized to add new players to the city')
         return redirect(url_for('player_url.show_players', city_id=city_id))
     if request.method == 'POST':
+        print 'something'
         new_player_figure = Player(name=request.form['name'], height=request.form[
                            'height'], weight=request.form['weight'], sport=request.form['sport'], city_id=city_id)
+        if new_player_figure.name == '':
+            flash('Please enter a name before submitting') # flash if the field is empty
+            return render_template('new_player.html', city_id=city_id)
         new_player_figure.save_to_db()
         flash('New Player %s Successfully Created' % (new_player_figure.name))
         return redirect(url_for('player_url.show_players', city_id=city_id))

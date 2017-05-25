@@ -27,6 +27,9 @@ def new_city():
         return redirect('/login')
     if request.method == 'POST':
         new_city = City(name=request.form['name'], user_id=login_session['user_id'])
+        if new_city.name == '':
+            flash('Please enter a city before submitting') # flash if the field is empty
+            return render_template('new_city.html')
         new_city.save_to_db()
         flash('New City %s Successfully Created' % new_city.name)
         return redirect(url_for('city_url.show_cities'))
@@ -49,6 +52,8 @@ def edit_city(city_id):
             edited_city.save_to_db()
             flash('City Successfully Edited %s' % edited_city.name)
             return redirect(url_for('city_url.show_cities'))
+        flash('Please enter a city before submitting')  # flash if the field is empty
+        return render_template('edit_city.html', city=edited_city)
     else:
         return render_template('edit_city.html', city=edited_city)
 

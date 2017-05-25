@@ -28,3 +28,4 @@ class City(Base):
     @classmethod
     def find_by_id(cls, city_id):
         return cls.query.filter_by(id=city_id).first()
+
