@@ -4,7 +4,10 @@ from controllers.player import player_url
 from controllers.user import user_url
 from controllers.jsonendpoints import json_url
 from flask_sqlalchemy import SQLAlchemy
+<<<<<<< HEAD
 from database import db
+=======
+>>>>>>> bb782b9079a8b2d487227b8661b39408b726c92b
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///data.db'
@@ -21,7 +24,12 @@ def create_tables():
     db.create_all()
 
 if __name__ == '__main__':
+<<<<<<< HEAD
 
+=======
+	
+    db = SQLAlchemy()
+>>>>>>> bb782b9079a8b2d487227b8661b39408b726c92b
     db.init_app(app)
     app.secret_key = 'super_secret_key'
     app.debug = True
