@@ -2,7 +2,7 @@ from flask import render_template, redirect, request, url_for, flash, Blueprint
 
 from models.city import City
 from models.user import User
-from user import login_session
+from .user import login_session
 
 
 city_url = Blueprint('city_url', __name__)
