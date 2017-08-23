@@ -28,7 +28,6 @@ def new_player(city_id):
         flash('You are not authorized to add new players to the city')
         return redirect(url_for('player_url.show_players', city_id=city_id))
     if request.method == 'POST':
-        print 'something'
         new_player_figure = Player(name=request.form['name'], height=request.form[
                            'height'], weight=request.form['weight'], sport=request.form['sport'], city_id=city_id)
         if new_player_figure.name == '':
