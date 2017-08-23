@@ -1,5 +1,5 @@
-from base import Base
-from city import City
+from models.base import Base
+from models.city import City
 from database import db
 
 
